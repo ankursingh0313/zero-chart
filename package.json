@@ -18,9 +18,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc -p tsconfig.app.json --declaration --emitDeclarationOnly --outDir dist --noEmit false",
-    "prepublishOnly": "npm run build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "repository": "https://github.com/ankursingh0313/zero-chart.git"
   },
   "peerDependencies": {
     "react": "^19.1.0",

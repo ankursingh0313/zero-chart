@@ -1,8 +1,11 @@
 {
   "name": "zero-chart",
+  "description": "Zero dependency React candlestick chart library",
   "private": false,
-  "version": "0.0.1",
+  "version": "0.0.11",
+  "license": "MIT",
   "type": "module",
+  "sideEffects": false,
   "files": [
     "dist"
   ],
@@ -12,15 +15,33 @@
   "exports": {
     ".": {
       "import": "./dist/zero-chart.js",
-      "require": "./dist/zero-chart.umd.cjs"
+      "require": "./dist/zero-chart.umd.cjs",
+      "types": "./dist/index.d.ts"
     }
   },
+  "keywords": [
+    "react",
+    "chart",
+    "candlestick",
+    "financial",
+    "graph",
+    "canvas",
+    "visualization"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ankursingh0313/zero-chart.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ankursingh0313/zero-chart/issues"
+  },
+  "homepage": "https://github.com/ankursingh0313/zero-chart#readme",
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc -p tsconfig.app.json --declaration --emitDeclarationOnly --outDir dist --noEmit false",
+    "prepublishOnly": "npm run build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "repository": "https://github.com/ankursingh0313/zero-chart.git"
+    "preview": "vite preview"
   },
   "peerDependencies": {
     "react": "^19.1.0",

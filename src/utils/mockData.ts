@@ -1,8 +1,12 @@
 import type { CandleData } from '../types';
 
-export const generateData = (count: number = 100): CandleData[] => {
+export const generateData = (count: number = 100, interval: number = 24 * 60 * 60 * 1000): CandleData[] => {
   const data: CandleData[] = [];
-  let time = new Date('2023-01-01').getTime();
+  const now = Date.now();
+  // Align time to the nearest interval to make it look cleaner
+  let time = now - (count * interval);
+  time = Math.floor(time / interval) * interval;
+  
   let price = 100;
 
   for (let i = 0; i < count; i++) {
@@ -21,7 +25,7 @@ export const generateData = (count: number = 100): CandleData[] => {
       close,
     });
 
-    time += 24 * 60 * 60 * 1000; // 1 day
+    time += interval;
     price = close;
   }
 

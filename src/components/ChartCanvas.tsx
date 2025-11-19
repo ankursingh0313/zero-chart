@@ -5,6 +5,7 @@ import { createScales } from '../utils/scales';
 import { drawCandle } from '../utils/drawCandle';
 import { drawLine } from '../utils/drawLine';
 import { drawBar } from '../utils/drawBar';
+import { drawXAxis, drawYAxis } from '../utils/drawAxis';
 import { useChartDimensions } from '../hooks/useChartDimensions';
 
 interface ChartCanvasProps {
@@ -50,16 +51,32 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
     // Handle Zoom (Wheel)
     const handleWheel = (e: React.WheelEvent) => {
         e.preventDefault();
+        const rect = ref.current?.getBoundingClientRect();
+        if (!rect) return;
+
+        const mouseX = e.clientX - rect.left;
+        const width = rect.width;
+        const ratio = mouseX / width;
+
         const { start, end } = visibleRange;
         const range = end - start;
-        const zoomFactor = 0.1;
-        const delta = Math.sign(e.deltaY) * Math.max(Math.floor(range * zoomFactor), 1);
 
-        let newStart = start - delta;
-        let newEnd = end + delta;
+        // Zoom factor (10% of current range)
+        const zoomAmount = Math.max(Math.floor(range * 0.1), 1);
+        const direction = Math.sign(e.deltaY);
 
+        // Calculate change in range size
+        // If zooming out (direction > 0), range increases
+        // If zooming in (direction < 0), range decreases
+        const rangeChange = direction > 0 ? zoomAmount : -zoomAmount;
+
+        let newStart = start - Math.round(rangeChange * ratio);
+        let newEnd = end + Math.round(rangeChange * (1 - ratio));
+
+        // Min range check
         if (newEnd - newStart < 5) return;
 
+        // Bounds check
         newStart = Math.max(0, newStart);
         newEnd = Math.min(data.length, newEnd);
 
@@ -151,6 +168,10 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
         ctx.fillRect(0, 0, dimensions.width, dimensions.height);
 
         if (!xScale || !yScale || visibleData.length === 0) return;
+
+        // Draw Axes
+        drawXAxis(ctx, xScale, dimensions.width, dimensions.height, theme);
+        drawYAxis(ctx, yScale, dimensions.width, dimensions.height, theme);
 
         // Draw Chart
         if (chartType === 'line') {

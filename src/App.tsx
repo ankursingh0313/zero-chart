@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ChartCanvas } from './components/ChartCanvas';
+import { ChartToolbar } from './components/ChartToolbar';
 import { generateData } from './utils/mockData';
 import type { CandleData, ChartType } from './types';
 import './App.css';
@@ -8,18 +9,19 @@ function App() {
   const [data, setData] = useState<CandleData[]>([]);
   const [chartType, setChartType] = useState<ChartType>('candle');
   const [isLive, setIsLive] = useState(false);
+  const [interval, setIntervalValue] = useState(24 * 60 * 60 * 1000); // Default 1 day
 
   useEffect(() => {
-    setData(generateData(100));
-  }, []);
+    setData(generateData(100, interval));
+  }, [interval]);
 
   useEffect(() => {
     if (!isLive) return;
 
-    const interval = setInterval(() => {
+    const intervalId = setInterval(() => {
       setData(prev => {
         const last = prev[prev.length - 1];
-        const nextTime = last.timestamp + 24 * 60 * 60 * 1000;
+        const nextTime = last.timestamp + interval;
         const volatility = 2;
         const change = (Math.random() - 0.5) * volatility;
         const open = last.close;
@@ -38,13 +40,16 @@ function App() {
       });
     }, 1000);
 
-    return () => clearInterval(interval);
-  }, [isLive]);
+    return () => clearInterval(intervalId);
+  }, [isLive, interval]);
 
   return (
     <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', background: '#161a25' }}>
       <header style={{ padding: '1rem', color: 'white', borderBottom: '1px solid #2a2e39', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>Zero Chart</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <h1>Zero Chart</h1>
+          <ChartToolbar selectedInterval={interval} onIntervalChange={setIntervalValue} />
+        </div>
         <div style={{ display: 'flex', gap: '10px' }}>
           <button
             onClick={() => setIsLive(!isLive)}

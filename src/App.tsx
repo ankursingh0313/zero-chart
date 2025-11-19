@@ -44,7 +44,7 @@ function App() {
   return (
     <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', background: '#161a25' }}>
       <header style={{ padding: '1rem', color: 'white', borderBottom: '1px solid #2a2e39', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>React Candlestick Chart</h1>
+        <h1>Zero Chart</h1>
         <div style={{ display: 'flex', gap: '10px' }}>
           <button
             onClick={() => setIsLive(!isLive)}

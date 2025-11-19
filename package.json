@@ -2,7 +2,7 @@
   "name": "zero-chart",
   "description": "Zero dependency React candlestick chart library",
   "private": false,
-  "version": "0.0.11",
+  "version": "0.0.12",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
